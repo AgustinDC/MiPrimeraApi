@@ -1,6 +1,6 @@
-﻿namespace MiPrimeraApi2.Model
+﻿namespace MiPrimeraApi2.Controllers.DTO
 {
-    public class Producto
+    public class PutProducto
     {
         public int Id { get; set; }
         public string Descripciones { get; set; }
@@ -9,5 +9,4 @@
         public int Stock { get; set; }
         public int IdUsuario { get; set; }
     }
-
 }

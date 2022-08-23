@@ -37,5 +37,24 @@ namespace MiPrimeraApi2.Repository
 
             return ProductosVendidos;
         }
+
+        internal static void Agregar(int id, int venta, int stock)
+        {
+            string sqlQuery = "INSERT INTO ProductoVendido (IdProducto, IdVenta, Stock) " + 
+                              "VALUES (@IdProducto, @IdVenta, @stock)";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+                sqlCommand.Parameters.AddWithValue("@IdProducto", id);
+                sqlCommand.Parameters.AddWithValue("@IdVenta", venta);
+                sqlCommand.Parameters.AddWithValue("@Stock", stock);
+
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
     }
 }

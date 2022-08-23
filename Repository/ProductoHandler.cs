@@ -6,6 +6,7 @@ namespace MiPrimeraApi2.Repository
     public class ProductoHandler
     {
         public const string ConnectionString = "Server = DESKTOP-II66TRU; Database = SistemaGestion; Trusted_connection=true";
+
         public static List<Producto> GetProductos()
         {
             List<Producto> Productos = new List<Producto>();
@@ -40,5 +41,60 @@ namespace MiPrimeraApi2.Repository
             return Productos;
         }
 
+        public static void Actualizar(Producto producto)
+        {
+            string sqlQuery = "UPDATE Producto " +
+                "SET Descripciones = @descripciones, Costo = @costo, PrecioVenta = @precioVenta, Stock = @stock " +
+                "WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+                sqlCommand.Parameters.AddWithValue("@id", producto.Id);
+                sqlCommand.Parameters.AddWithValue("@descripciones", producto.Descripciones);
+                sqlCommand.Parameters.AddWithValue("@costo", producto.Costo);
+                sqlCommand.Parameters.AddWithValue("@precioVenta", producto.PrecioVenta);
+                sqlCommand.Parameters.AddWithValue("@stock", producto.Stock);
+
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
+
+        public static void Borrar(int id)
+        {
+            string sqlQuery = "DELETE * FROM Producto WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+                sqlCommand.Parameters.AddWithValue("@id", id);
+
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+
+            }
+
+        }
+
+        internal static void ActualizarDesdeVenta(Producto producto)
+        {
+            string sqlQuery = "UPDATE Producto SET Stock = Stock - @stock WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+                sqlCommand.Parameters.AddWithValue("@stock", producto.Stock);
+
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
     }
 }
